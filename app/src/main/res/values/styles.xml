@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    please change parent theme to your app name-->
+    <style name="FullScreen" parent="Theme.Listview_wshop">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>
