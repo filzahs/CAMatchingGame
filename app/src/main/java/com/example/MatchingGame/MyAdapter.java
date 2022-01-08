@@ -31,6 +31,7 @@ public class MyAdapter extends ArrayAdapter<Object> {
         if(view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.rows, parent, false);
+            view.setMinimumHeight(MainActivity.height/6); //additional 1 more row, to get the gridview to fill the screen
         }
 
         ImageView imageView = view.findViewById(R.id.imageView);

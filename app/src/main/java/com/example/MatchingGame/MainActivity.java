@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -28,12 +29,20 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
     ProgressBar progressBar;
     TextView progressBarText;
 
+    public static int width = 0;
+    public static int height = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressbar);
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        width = metrics.widthPixels;
+        height = metrics.heightPixels;
+
+        progressBar = findViewById(R.id.progressbar);
         progressBar.setMax(20);
         progressBarText = findViewById(R.id.progressbarText);
 
@@ -54,7 +63,8 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
     //parse the html page
     //download the images
     // load the imageview
-    public void parseUrl(String url) {
+    public void parseUrl(String userUrl) {
+        String url = checkUrl(userUrl);
 
         new Thread(new Runnable() {
             @Override
@@ -84,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
                                     }
                                     if(imgCount >= 20) {
                                         progressBar.setVisibility(View.GONE);
-                                        progressBarText.setText(String.format("Download completed. Please select 6 images."));
+                                        progressBarText.setText("Download completed. Please select 6 images.");
                                     }
                                 }
                             });
@@ -122,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
                             if(gridView != null) {
                                 gridView.setAdapter(new MyAdapter(MainActivity.this, imgArray));
                                 gridView.setOnItemClickListener(MainActivity.this);
+
                             }
 
                         }
@@ -132,6 +143,21 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         }).start();
 
 
+
+    }
+
+    private String checkUrl(String url) {
+        if(url.startsWith("https://")) {
+            return url;
+        } else if(url.startsWith("http://")) {
+            StringBuilder sb = new StringBuilder(url);
+            sb.insert(4, 's');
+            return sb.toString();
+        }
+        else {
+            String prefixURL = "https://";
+            return prefixURL + url;
+        }
 
     }
 
